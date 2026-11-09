@@ -1,0 +1,41 @@
+{
+  "navi": {
+    "name": "NAVI",
+    "region": "Indonesia",
+    "trophies": { "mpl": 0, "msc": 0, "mseries": 0 },
+    "staff": { "head_coach": "Flide", "analyst": "Joysh" },
+    "roster": [
+      { "role": "Roam", "name": "Refen", "tier": "B-", "isCaptain": true },
+      { "role": "Jungler", "name": "Unesh", "tier": "A", "isCaptain": false },
+      { "role": "Gold", "name": "Kayeye", "tier": "B-", "isCaptain": false },
+      { "role": "EXP", "name": "Desasa", "tier": "B-", "isCaptain": false },
+      { "role": "Mid", "name": "Defords", "tier": "B-", "isCaptain": false }
+    ]
+  },
+  "evos": {
+    "name": "EVOS ATH",
+    "region": "Indonesia",
+    "trophies": { "mpl": 1, "msc": 1, "mseries": 0 },
+    "staff": { "head_coach": "Yapana", "analyst": "Forroon" },
+    "roster": [
+      { "role": "Gold", "name": "Somfine", "tier": "C+", "isCaptain": false },
+      { "role": "Mid", "name": "NotMeFin", "tier": "B", "isCaptain": false },
+      { "role": "Jungler", "name": "AsstVolt", "tier": "A-", "isCaptain": false },
+      { "role": "Roam", "name": "Yenbo", "tier": "B+", "isCaptain": true },
+      { "role": "EXP", "name": "ARIQ", "tier": "A-", "isCaptain": false }
+    ]
+  },
+  "dewa": {
+    "name": "DEWA Convenent",
+    "region": "Indonesia",
+    "trophies": { "mpl": 1, "msc": 0, "mseries": 0 },
+    "staff": { "head_coach": "Awape", "analyst": "Sonz" },
+    "roster": [
+      { "role": "Jungler", "name": "Donato", "tier": "A-", "isCaptain": false },
+      { "role": "Roam", "name": "Yokai", "tier": "B+", "isCaptain": true },
+      { "role": "Mid", "name": "Selnshoot", "tier": "B-", "isCaptain": false },
+      { "role": "EXP", "name": "Kanos", "tier": "B", "isCaptain": false },
+      { "role": "Gold", "name": "Ciens", "tier": "B", "isCaptain": false }
+    ]
+  }
+}

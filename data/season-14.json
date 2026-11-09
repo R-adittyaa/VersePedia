@@ -1,0 +1,52 @@
+{
+  "season": 14,
+  "status": "completed",
+  "standings": [
+    { "rank": 1, "teamName": "NAVI", "status": "Playoff" },
+    { "rank": 2, "teamName": "EVOS ATH", "status": "Playoff" },
+    { "rank": 3, "teamName": "ALTER EGO", "status": "Playoff" },
+    { "rank": 4, "teamName": "DEWA Convenent", "status": "Playoff" },
+    { "rank": 5, "teamName": "RRQ Exco", "status": "Playoff" },
+    { "rank": 6, "teamName": "ONIC", "status": "Playoff" },
+    { "rank": 7, "teamName": "BTR Zetha", "status": "Playoff" },
+    { "rank": 8, "teamName": "TLID", "status": "Playoff" },
+    { "rank": 9, "teamName": "GEEK TRYH", "status": "Eliminated" }
+  ],
+  "playoff": {
+    "format": "double_elim_8",
+    "matches": [
+      {
+        "match_no": 1, "bracket": "upper", "round": 1,
+        "team_a": "AE", "team_b": "ONIC", "score_a": 3, "score_b": 2
+      },
+      {
+        "match_no": 2, "bracket": "upper", "round": 1,
+        "team_a": "DEWA", "team_b": "RRQ", "score_a": 3, "score_b": 2
+      },
+      {
+        "match_no": 3, "bracket": "upper", "round": 2,
+        "team_a": "NAVI", "team_b": "AE", "score_a": 3, "score_b": 2
+      },
+      {
+        "match_no": 4, "bracket": "upper", "round": 2,
+        "team_a": "EVOS", "team_b": "DEWA", "score_a": 3, "score_b": 2
+      },
+      {
+        "match_no": 5, "bracket": "lower", "round": 1,
+        "team_a": "AE", "team_b": "DEWA", "score_a": 1, "score_b": 3
+      },
+      {
+        "match_no": 6, "bracket": "lower", "round": 2,
+        "team_a": "NAVI", "team_b": "EVOS", "score_a": 2, "score_b": 3
+      },
+      {
+        "match_no": 7, "bracket": "lower", "round": 3,
+        "team_a": "DEWA", "team_b": "NAVI", "score_a": 4, "score_b": 2
+      },
+      {
+        "match_no": 8, "bracket": "grand_final", "round": 1,
+        "team_a": "EVOS", "team_b": "DEWA", "score_a": 3, "score_b": 4
+      }
+    ]
+  }
+}

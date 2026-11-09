@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Tabel Baru: Wadah Utama (Folder)
+model Verse {
+  id          String   @id @default(cuid())
+  title       String   // Contoh: "MPL ID Alternate Universe"
+  description String?  // Contoh: "Semesta di mana semua trofi di-reset"
+  createdAt   DateTime @default(now())
+  
+  seasons     Season[] // Satu Verse punya banyak Season
+}
+
+// Tabel Season (Sekarang nempel ke Verse)
+model Season {
+  id        String     @id @default(cuid())
+  verseId   String     // Relasi ke Verse
+  number    Int        
+  status    String     @default("ongoing")
+  standings Standing[]
+  matches   Match[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  
+  verse     Verse      @relation(fields: [verseId], references: [id], onDelete: Cascade)
+
+  @@unique([verseId, number]) // Dalam 1 verse, nomor season nggak boleh kembar
+}
+
+// ... (Model Standing, Match, Team, Player biarkan saja sama seperti sebelumnya)
+model Standing {
+  id        String @id @default(cuid())
+  seasonId  String
+  teamName  String
+  rank      Int
+  status    String
+  season    Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  @@unique([seasonId, teamName])
+}
+
+model Match {
+  id        String @id @default(cuid())
+  seasonId  String
+  matchNo   Int
+  bracket   String 
+  round     Int
+  teamA     String
+  teamB     String
+  scoreA    Int
+  scoreB    Int
+  season    Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+}
+
+model Team {
+  id          String @id @default(cuid())
+  name        String @unique
+  region      String @default("Indonesia")
+  logo        String? 
+  mplTrophies Int   @default(0)
+  mscTrophies Int   @default(0)
+  players     Player[]
+}
+
+model Player {
+  id        String  @id @default(cuid())
+  teamId    String
+  name      String
+  role      String  
+  tier      String  @default("C")
+  isCaptain Boolean @default(false)
+  team      Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
