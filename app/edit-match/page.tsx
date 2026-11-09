@@ -1,13 +1,14 @@
+import { Suspense } from "react";
 import { prisma } from "../../lib/prisma";
 import { updateMatch } from "../../actions/season";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export default async function EditMatchPage({ 
-  searchParams 
-}: { 
-  searchParams: Promise<{ id?: string }> 
-}) {
+interface EditMatchProps {
+  searchParams: Promise<{ id?: string }>;
+}
+
+async function EditMatchContent({ searchParams }: EditMatchProps) {
   const resolvedParams = await searchParams;
   const id = resolvedParams.id;
 
@@ -60,5 +61,13 @@ export default async function EditMatchPage({
         </form>
       </div>
     </div>
+  );
+}
+
+export default function EditMatchPage({ searchParams }: EditMatchProps) {
+  return (
+    <Suspense fallback={<div className="text-zinc-500 text-center py-20 animate-pulse">Memuat data match...</div>}>
+      <EditMatchContent searchParams={searchParams} />
+    </Suspense>
   );
 }
