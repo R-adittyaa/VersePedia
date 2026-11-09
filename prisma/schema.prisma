@@ -6,20 +6,18 @@ datasource db {
   provider = "postgresql"
 }
 
-// Tabel Baru: Wadah Utama (Folder)
 model Verse {
   id          String   @id @default(cuid())
-  title       String   // Contoh: "MPL ID Alternate Universe"
-  description String?  // Contoh: "Semesta di mana semua trofi di-reset"
+  title       String
+  description String?
   createdAt   DateTime @default(now())
   
-  seasons     Season[] // Satu Verse punya banyak Season
+  seasons     Season[]
 }
 
-// Tabel Season (Sekarang nempel ke Verse)
 model Season {
   id        String     @id @default(cuid())
-  verseId   String     // Relasi ke Verse
+  verseId   String
   number    Int        
   status    String     @default("ongoing")
   standings Standing[]
@@ -29,17 +27,18 @@ model Season {
   
   verse     Verse      @relation(fields: [verseId], references: [id], onDelete: Cascade)
 
-  @@unique([verseId, number]) // Dalam 1 verse, nomor season nggak boleh kembar
+  @@unique([verseId, number])
 }
 
-// ... (Model Standing, Match, Team, Player biarkan saja sama seperti sebelumnya)
 model Standing {
   id        String @id @default(cuid())
   seasonId  String
   teamName  String
   rank      Int
   status    String
+  
   season    Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
   @@unique([seasonId, teamName])
 }
 
@@ -53,17 +52,31 @@ model Match {
   teamB     String
   scoreA    Int
   scoreB    Int
+  
   season    Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
 }
 
 model Team {
-  id          String @id @default(cuid())
-  name        String @unique
-  region      String @default("Indonesia")
+  id          String   @id @default(cuid())
+  name        String   @unique
+  region      String   @default("Indonesia")
   logo        String? 
-  mplTrophies Int   @default(0)
-  mscTrophies Int   @default(0)
+  mplTrophies Int      @default(0)
+  mscTrophies Int      @default(0)
+  
   players     Player[]
+  staffs      Staff[]
+
+  @@index([name])
+}
+
+model Staff {
+  id     String @id @default(cuid())
+  teamId String
+  name   String
+  role   String 
+
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
 }
 
 model Player {
@@ -73,5 +86,6 @@ model Player {
   role      String  
   tier      String  @default("C")
   isCaptain Boolean @default(false)
+  
   team      Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
 }

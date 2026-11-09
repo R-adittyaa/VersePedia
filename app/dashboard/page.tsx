@@ -3,7 +3,8 @@ import Link from "next/link";
 import { prisma } from "../../lib/prisma";
 import { 
   createVerse, createSeason, addTeamToSeason, createMatch, createPlayer,
-  deleteStanding, deleteMatch, deletePlayer, deleteSeason 
+  deleteStanding, deleteMatch, deletePlayer, deleteSeason,
+  createStaff, deleteStaff 
 } from "../../actions/season";
 
 interface DashboardProps {
@@ -33,6 +34,7 @@ async function DashboardContent({ searchParams }: DashboardProps) {
   
   const teams = await prisma.team.findMany({ orderBy: { name: "asc" } });
   const players = await prisma.player.findMany({ orderBy: { name: "asc" }, include: { team: true } });
+  const staffs = await prisma.staff.findMany({ include: { team: true }, orderBy: { name: "asc" } });
 
   return (
     <div>
@@ -58,30 +60,15 @@ async function DashboardContent({ searchParams }: DashboardProps) {
       </div>
 
       {!activeVerse ? (
-        /* TAMPILAN KALAU BELUM ADA VERSE */
         <div className="text-center py-20 bg-zinc-900 border border-zinc-800 rounded-xl max-w-md mx-auto">
           <h2 className="text-xl font-bold text-white mb-6">Buat Verse Pertama Lu!</h2>
           <form action={createVerse} className="flex flex-col gap-3 px-6">
-            <input 
-              type="text" 
-              name="title" 
-              required 
-              placeholder="Judul Verse (MPL Universe)" 
-              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" 
-            />
-            <input 
-              type="text" 
-              name="description" 
-              placeholder="Deskripsi (Opsional)" 
-              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" 
-            />
-            <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mt-2">
-              + Buat Verse
-            </button>
+            <input type="text" name="title" required placeholder="Judul Verse (MPL Universe)" className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" />
+            <input type="text" name="description" placeholder="Deskripsi (Opsional)" className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" />
+            <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mt-2">+ Buat Verse</button>
           </form>
         </div>
       ) : (
-        /* TAMPILAN KALAU UDAH ADA VERSE */
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
             <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-xl">
@@ -174,6 +161,27 @@ async function DashboardContent({ searchParams }: DashboardProps) {
                 <button type="submit" className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-4 rounded-lg mt-2">+ Tambah Pemain</button>
               </form>
             </div>
+
+            {/* FORM STAFF */}
+            <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-xl">
+              <h2 className="text-xl font-bold text-white mb-4">5. Tambah Coaching Staff</h2>
+              <form action={createStaff} className="flex flex-col gap-3">
+                <select name="teamId" required className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white">
+                  <option value="">-- Pilih Tim --</option>
+                  {teams.map((t: any) => <option key={t.id} value={t.id}>{t.name}</option>)}
+                </select>
+                <div className="flex gap-2">
+                  <input type="text" name="name" required placeholder="Nama Staff" className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" />
+                  <select name="role" required className="w-40 bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white">
+                    <option value="Head Coach">Head Coach</option>
+                    <option value="Asisten Coach">Asisten Coach</option>
+                    <option value="Analis">Analis</option>
+                  </select>
+                </div>
+                <button type="submit" className="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded-lg mt-2">+ Tambah Staff</button>
+              </form>
+            </div>
+
           </div>
 
           <div className="space-y-8">
@@ -272,6 +280,25 @@ async function DashboardContent({ searchParams }: DashboardProps) {
                 ))}
               </div>
             </div>
+
+            <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-xl">
+              <h2 className="text-xl font-bold text-white mb-4">Staff Terinput</h2>
+              <div className="max-h-60 overflow-y-auto space-y-2 pr-2">
+                {staffs.map((s: any) => (
+                  <li key={s.id} className="bg-zinc-950 p-3 rounded-lg border border-zinc-800 text-white text-sm flex justify-between items-center group">
+                    <div>
+                      <span className="font-semibold block">{s.name}</span>
+                      <span className="text-zinc-500 text-xs">{s.team.name} - {s.role}</span>
+                    </div>
+                    <form action={deleteStaff}>
+                      <input type="hidden" name="id" value={s.id} />
+                      <button type="submit" className="text-red-500 hover:text-red-400 opacity-50 group-hover:opacity-100 transition-opacity text-xs font-bold">Hapus</button>
+                    </form>
+                  </li>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
       )}

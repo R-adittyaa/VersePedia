@@ -144,3 +144,22 @@ export async function updatePlayer(formData: FormData) {
     revalidatePath("/dashboard");
   } catch (error) { console.error(error); }
 }
+
+export async function createStaff(formData: FormData) {
+  const teamId = formData.get("teamId") as string;
+  const name = formData.get("name") as string;
+  const role = formData.get("role") as string;
+
+  try {
+    await prisma.staff.create({ data: { teamId, name, role } });
+    revalidatePath("/dashboard");
+  } catch (error) { console.error(error); }
+}
+
+export async function deleteStaff(formData: FormData) {
+  const id = formData.get("id") as string;
+  try {
+    await prisma.staff.delete({ where: { id } });
+    revalidatePath("/dashboard");
+  } catch (error) { console.error(error); }
+}

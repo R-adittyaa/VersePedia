@@ -10,13 +10,14 @@ async function TeamContent({ params }: TeamPageProps) {
   const resolvedParams = await params;
   const teamNameParam = decodeURIComponent(resolvedParams.teamSlug);
   
-  // Cari tim di database berdasarkan nama (case-insensitive)
+  const firstWord = teamNameParam.split(' ')[0];
   const team = await prisma.team.findFirst({
     where: { 
-      name: { contains: teamNameParam } 
+      name: { contains: firstWord } 
     },
     include: { 
-      players: { orderBy: { role: "asc" } } 
+      players: { orderBy: { role: "asc" } },
+      staffs: true // <-- Tambahan buat narik data Staff
     }
   });
 
@@ -34,14 +35,12 @@ async function TeamContent({ params }: TeamPageProps) {
 
   return (
     <div>
-      {/* HEADER TIM */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl font-extrabold text-white mb-2">{team.name}</h1>
           <p className="text-zinc-400">Region: {team.region}</p>
         </div>
         
-        {/* TROFI */}
         <div className="flex gap-4">
           <div className="bg-zinc-950 px-6 py-3 rounded-xl border border-zinc-800 text-center">
             <span className="block text-xs text-zinc-500 uppercase font-bold">MPL Titles</span>
@@ -56,12 +55,23 @@ async function TeamContent({ params }: TeamPageProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         
-        {/* STAFF COACHING (Nanti kita isi dari DB) */}
+        {/* STAFF COACHING */}
         <div className="md:col-span-1">
           <h2 className="text-xl font-bold text-white mb-4 border-b border-zinc-800 pb-2">Coaching Staff</h2>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-center text-zinc-500 text-sm italic">
-            Belum ada data staff untuk tim ini.
-          </div>
+          {team.staffs.length === 0 ? (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-center text-zinc-500 text-sm italic">
+              Belum ada data staff untuk tim ini.
+            </div>
+          ) : (
+            <ul className="space-y-2">
+              {team.staffs.map((staff) => (
+                <li key={staff.id} className="bg-zinc-900 p-3 rounded-lg border border-zinc-800 flex justify-between items-center">
+                  <span className="font-semibold text-white text-sm">{staff.name}</span>
+                  <span className="text-xs text-zinc-400 bg-zinc-950 px-2 py-1 rounded">{staff.role}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* ROSTER PEMAIN */}
