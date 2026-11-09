@@ -58,8 +58,30 @@ async function DashboardContent({ searchParams }: DashboardProps) {
       </div>
 
       {!activeVerse ? (
-        <div className="text-center py-20 text-zinc-500">Belum ada Verse. Silakan buat di halaman utama.</div>
+        /* TAMPILAN KALAU BELUM ADA VERSE */
+        <div className="text-center py-20 bg-zinc-900 border border-zinc-800 rounded-xl max-w-md mx-auto">
+          <h2 className="text-xl font-bold text-white mb-6">Buat Verse Pertama Lu!</h2>
+          <form action={createVerse} className="flex flex-col gap-3 px-6">
+            <input 
+              type="text" 
+              name="title" 
+              required 
+              placeholder="Judul Verse (MPL Universe)" 
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" 
+            />
+            <input 
+              type="text" 
+              name="description" 
+              placeholder="Deskripsi (Opsional)" 
+              className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" 
+            />
+            <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mt-2">
+              + Buat Verse
+            </button>
+          </form>
+        </div>
       ) : (
+        /* TAMPILAN KALAU UDAH ADA VERSE */
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
             <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-xl">
