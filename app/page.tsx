@@ -2,12 +2,18 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { prisma } from "../lib/prisma";
 
-// 1. Pindahkan logika ambil data ke dalam komponen terpisah
+interface VerseWithSeasons {
+  id: string;
+  title: string;
+  description: string | null;
+  seasons: { id: string; number: number; status: string }[];
+}
+
 async function VerseList() {
   const verses = await prisma.verse.findMany({
     orderBy: { createdAt: "desc" },
-    include: { seasons: { orderBy: { number: "asc" } } }
-  });
+    include: { seasons: { orderBy: { number: "asc" } } },
+  }) as VerseWithSeasons[];
 
   if (verses.length === 0) {
     return (
@@ -19,7 +25,7 @@ async function VerseList() {
 
   return (
     <div className="space-y-16">
-      {verses.map((verse) => (
+      {verses.map((verse: VerseWithSeasons) => (
         <div key={verse.id} className="border-t border-zinc-800 pt-8">
           <div className="mb-6">
             <h2 className="text-3xl font-bold text-white mb-2">{verse.title}</h2>
@@ -30,8 +36,9 @@ async function VerseList() {
             {verse.seasons.length === 0 ? (
               <p className="text-sm text-zinc-500 italic">Belum ada season di verse ini.</p>
             ) : (
-              verse.seasons.map((season) => (
-                <Link key={season.id} href={`/seasons/${season.id}`} className="group">                  <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl hover:border-blue-500/50 transition-all">
+              verse.seasons.map((season: { id: string; number: number; status: string }) => (
+                <Link key={season.id} href={`/seasons/${season.id}`} className="group">
+                  <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl hover:border-blue-500/50 transition-all">
                     <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">Season {season.number}</h3>
                     <p className="text-sm text-zinc-500 mt-1 capitalize">Status: {season.status}</p>
                     <div className="mt-4 text-sm font-medium text-blue-500">Lihat Detail →</div>
@@ -46,11 +53,9 @@ async function VerseList() {
   );
 }
 
-// 2. Komponen utama cuma nampilin UI statis dan manggil <VerseList />
 export default function Home() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      
       <div className="text-center mb-16">
         <h1 className="text-5xl font-extrabold tracking-tight text-white mb-6">
           MPL <span className="text-blue-500">Verse</span> Engine
@@ -64,12 +69,9 @@ export default function Home() {
           </Link>
         </div>
       </div>
-
-      {/* 3. Bungkus dengan Suspense */}
       <Suspense fallback={<div className="text-center text-zinc-500 animate-pulse py-12">Memuat daftar Verse...</div>}>
         <VerseList />
       </Suspense>
-
     </div>
   );
 }
