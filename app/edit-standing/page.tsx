@@ -1,13 +1,14 @@
+import { Suspense } from "react";
 import { prisma } from "../../lib/prisma";
 import { updateStanding } from "../../actions/season";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export default async function EditStandingPage({ 
-  searchParams 
-}: { 
-  searchParams: Promise<{ id?: string }> 
-}) {
+interface EditStandingProps {
+  searchParams: Promise<{ id?: string }>;
+}
+
+async function EditStandingContent({ searchParams }: EditStandingProps) {
   const resolvedParams = await searchParams;
   const id = resolvedParams.id;
 
@@ -17,7 +18,6 @@ export default async function EditStandingPage({
 
   if (!standing) return <div className="text-white text-center py-20">Data tidak ditemukan.</div>;
 
-  // Server Action buat nangkep form submit
   async function handleUpdate(formData: FormData) {
     "use server";
     await updateStanding(formData);
@@ -57,5 +57,13 @@ export default async function EditStandingPage({
         </form>
       </div>
     </div>
+  );
+}
+
+export default function EditStandingPage({ searchParams }: EditStandingProps) {
+  return (
+    <Suspense fallback={<div className="text-zinc-500 text-center py-20 animate-pulse">Memuat data klasemen...</div>}>
+      <EditStandingContent searchParams={searchParams} />
+    </Suspense>
   );
 }
