@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { prisma } from "../../lib/prisma";
+import SubmitButton from "../../components/SubmitButton";
 import { 
   createVerse, createSeason, addTeamToSeason, createMatch, createPlayer,
   deleteStanding, deleteMatch, deletePlayer, deleteSeason,
@@ -65,7 +66,11 @@ async function DashboardContent({ searchParams }: DashboardProps) {
           <form action={createVerse} className="flex flex-col gap-3 px-6">
             <input type="text" name="title" required placeholder="Judul Verse (MPL Universe)" className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" />
             <input type="text" name="description" placeholder="Deskripsi (Opsional)" className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" />
-            <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mt-2">+ Buat Verse</button>
+            <SubmitButton 
+              label="+ Buat Verse" 
+              loadingLabel="Membuat Verse..." 
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mt-2" 
+            />
           </form>
         </div>
       ) : (
@@ -77,7 +82,11 @@ async function DashboardContent({ searchParams }: DashboardProps) {
                 <input type="hidden" name="verseId" value={activeVerse.id} />
                 <div className="flex gap-2">
                   <input type="number" name="seasonNumber" required placeholder="No. Season (1)" className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" />
-                  <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg">+</button>
+                  <SubmitButton 
+                    label="+" 
+                    loadingLabel="..." 
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg" 
+                  />
                 </div>
               </form>
             </div>
@@ -97,7 +106,11 @@ async function DashboardContent({ searchParams }: DashboardProps) {
                   <input type="number" name="rank" required placeholder="Rank" className="w-24 bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" />
                 </div>
                 <p className="text-xs text-zinc-500">*Status Playoff otomatis: Rank 1-6 (Lolos), 7+ (Eliminasi).</p>
-                <button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg mt-1">+ Tambah</button>
+                <SubmitButton 
+                  label="+ Tambah" 
+                  loadingLabel="Menyimpan..." 
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg mt-1 w-full" 
+                />
               </form>
             </div>
 
@@ -126,7 +139,11 @@ async function DashboardContent({ searchParams }: DashboardProps) {
                   <input type="number" name="scoreB" required placeholder="0" className="w-16 bg-zinc-950 border border-zinc-700 rounded-lg px-2 py-2 text-white text-center" />
                   <input type="text" name="teamB" required placeholder="Tim B" className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-4 py-2 text-white" />
                 </div>
-                <button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg mt-2">+ Tambah Match</button>
+                <SubmitButton 
+                  label="+ Tambah Match" 
+                  loadingLabel="Menyimpan..." 
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg mt-2 w-full" 
+                />
               </form>
             </div>
 
@@ -158,7 +175,11 @@ async function DashboardContent({ searchParams }: DashboardProps) {
                   <input type="checkbox" name="isCaptain" className="w-4 h-4 rounded border-zinc-700 text-blue-600 focus:ring-blue-500 bg-zinc-950" />
                   Pemain ini adalah Kapten (Captain)
                 </label>
-                <button type="submit" className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-4 rounded-lg mt-2">+ Tambah Pemain</button>
+                <SubmitButton 
+                  label="+ Tambah Pemain" 
+                  loadingLabel="Menyimpan..." 
+                  className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-4 rounded-lg mt-2 w-full" 
+                />
               </form>
             </div>
 
@@ -178,7 +199,11 @@ async function DashboardContent({ searchParams }: DashboardProps) {
                     <option value="Analis">Analis</option>
                   </select>
                 </div>
-                <button type="submit" className="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded-lg mt-2">+ Tambah Staff</button>
+                <SubmitButton 
+                  label="+ Tambah Staff" 
+                  loadingLabel="Menyimpan Staff..." 
+                  className="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded-lg mt-2 w-full" 
+                />
               </form>
             </div>
 
